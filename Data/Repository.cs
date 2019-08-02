@@ -203,5 +203,43 @@ namespace StudentExercises.Data
                 }
             }
         }
+
+        public List<Cohorts> GetAllCohorts()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, Cohort_Name
+                                        FROM Cohorts";
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Cohorts> cohorts = new List<Cohorts>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int cohortNameColumnPosition = reader.GetOrdinal("Cohort_Name");
+                        string cohortNameValue = reader.GetString(cohortNameColumnPosition);
+
+                        Cohorts cohort = new Cohorts
+                        {
+                            Id = idValue,
+                            CohortName = cohortNameValue
+                        };
+                        cohorts.Add(cohort);
+                    }
+                    reader.Close();
+
+                    return cohorts;
+                }
+            }
+        }
     }
 }
