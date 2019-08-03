@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using StudentExercises.Data;
+using System.Linq;
 
 namespace StudentExercises
 {
@@ -21,6 +22,22 @@ namespace StudentExercises
 
             List<Exercises> exercisesJS = repository.GetAllJSExercises();
             PrintExercisesReport("All Exercises using Javascript:", exercisesJS);
+            Pause();
+
+            Exercises new1 = new Exercises
+            {
+                ExerciseName = "Ternary Traveler",
+                ExerciseLanguage = "Javascript"
+            };
+            repository.AddExercise(new1);
+            exercises = repository.GetAllExercises();
+            PrintExercisesReport("All Exercises after adding Ternary Traveler", exercises);
+            Pause();
+
+            Exercises dltExercise = exercises.First(e => e.ExerciseName == "Ternary Traveler");
+            repository.DeleteExercise(dltExercise.Id);
+            exercises = repository.GetAllExercises();
+            PrintExercisesReport("All Exercises after deleting Ternary Traveler", exercises);
             Pause();
 
             List<Instructors> instructors = repository.GetAllInstructors();

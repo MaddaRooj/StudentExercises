@@ -157,6 +157,34 @@ namespace StudentExercises.Data
                 }
             }
         }
+        public void AddExercise(Exercises exercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // More string interpolation
+                    cmd.CommandText = $"INSERT INTO Exercises (Exercise_Name, Exercise_Language) Values ('{exercise.ExerciseName}', '{exercise.ExerciseLanguage}')";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeleteExercise(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Assigned_Exercises WHERE Exercise_Id = @id
+                                        DELETE FROM Exercises WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         public List<Instructors> GetAllInstructors()
         {
